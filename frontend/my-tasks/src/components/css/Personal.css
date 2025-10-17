@@ -1,0 +1,270 @@
+/* Add for page blur effect when modal is open */
+.blurred {
+    filter: blur(4px);
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  /* Modal overlay background */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* dark transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal box */
+  .modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+  }
+  
+  /* Close (✖) button on modal */
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  /* Optional: disable scrolling when modal open */
+  body.modal-open {
+    overflow: hidden;
+  }
+  
+
+  .Btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border-radius: calc(45px / 2);
+    border: none;
+    cursor: pointer;
+    position: fixed;  /* Fixed position */
+    bottom: 100px;     /* Gap from the bottom edge */
+    right: 100px;       /* Gap from the left edge */
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  }
+  
+  /* plus sign */
+  .sign {
+    width: 100%;
+    font-size: 2.2em;
+    color: white;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* text */
+  .text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: white;
+    font-size: 1.4em;
+    font-weight: 500;
+    transition-duration: .3s;
+  }
+  /* hover effect on button width */
+  .Btn:hover {
+    width: 125px;
+    transition-duration: .3s;
+  }
+  
+  .Btn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 15px;
+  }
+  /* hover effect button's text */
+  .Btn:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 15px;
+  }
+  /* button click effect*/
+  .Btn:active {
+    transform: translate(2px, 2px);
+  }
+  
+  /* Personal Tasks Container */
+.personal-tasks-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #2c3e50;
+  font-size: 2rem;
+}
+
+.title-icon {
+  color: #81E7AF;
+  font-size: 1.8em;
+}
+
+/* Floating Action Button */
+.floating-action-btn {
+  background: #81E7AF;
+  border: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.floating-action-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.plus-icon {
+  color: white;
+  font-size: 1.5rem;
+}
+
+/* Tasks Grid */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 4rem 0;
+}
+
+.empty-illustration {
+  max-width: 300px;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+}
+
+.empty-message {
+  color: #7f8c8d;
+  font-size: 1.2rem;
+}
+
+/* Loading Skeleton */
+.loading-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.task-skeleton-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.skeleton-line {
+  height: 16px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  margin-bottom: 0.8rem;
+}
+
+.skeleton-line:last-child {
+  width: 70%;
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.task-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #7f8c8d;
+  padding: 0.5rem;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .personal-tasks-container {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
+}

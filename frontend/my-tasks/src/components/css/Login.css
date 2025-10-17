@@ -1,0 +1,114 @@
+/* General Layout */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg,#E69DB8, #F1E7E7);
+    animation: fadeIn 2s ease-in;
+  }
+  
+  .login-content {
+    text-align: center;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 40px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 1s forwards;
+  }
+  
+  .login-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input-group {
+    text-align: left;
+  }
+  
+  .input-group label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-group input:focus {
+    border-color: #ff6a88;
+  }
+  
+  .login-btn {
+    padding: 12px;
+    background-color: #ff6a88;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .login-btn:hover {
+    background-color: #ff4b72;
+    transform: translateY(-2px);
+  }
+  
+  .signup-link {
+    margin-top: 20px;
+  }
+  
+  .signup-link p {
+    color: #555;
+    font-size: 1rem;
+  }
+  
+  .signup-link a {
+    color: #ff6a88;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
