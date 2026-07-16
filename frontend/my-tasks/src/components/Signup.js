@@ -7,12 +7,14 @@ const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { getTasks } = useContext(PersonalTaskContext);
+  const { getTasks, getuser } = useContext(PersonalTaskContext);
   const navigate = useNavigate(); 
+
+  const host = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   const createuser = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/createuser`, {
+      const response = await fetch(`${host}/api/auth/createuser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,6 +26,7 @@ const Signup = () => {
       if (json.success) {
         alert(json.response);
         localStorage.setItem('token', json.authtoken);
+        await getuser();
         getTasks(); 
         navigate('/'); 
       } else {

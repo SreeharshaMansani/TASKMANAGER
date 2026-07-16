@@ -5,8 +5,9 @@ const User = require('../models/User');
 const jwt = require("jsonwebtoken");
 const fetchuser = require("./fetchuser");
 const PersonalTask = require('../models/PersonalTask');
+const bcrypt = require('bcryptjs');
 
-const JWT_SECRET = "hkjjcbcja"; 
+const JWT_SECRET = process.env.JWT_SECRET || "hkjjcbcja"; 
 
 
 //http://localhost:5000/api/auth/createuser
@@ -25,10 +26,13 @@ router.post('/createuser', [
       return res.status(400).json({ error: 'User already exists' });
     }
 
+    const salt = await bcrypt.genSalt(10);
+    const secPassword = await bcrypt.hash(req.body.password, salt);
+
     let user = await User.create({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password,
+      password: secPassword,
     });
 
     const data = {
@@ -38,8 +42,8 @@ router.post('/createuser', [
     };
 
     const authtoken = jwt.sign(data, JWT_SECRET);
-    success = true;
-    res.json({ success:true,response:"user created successfully",authtoken:authtoken});
+    const success = true;
+    res.json({ success, response: "user created successfully", authtoken: authtoken });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ error: 'Internal Server Error', message: err.message });
@@ -62,11 +66,12 @@ router.post('/login', [
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: "Invalid email" });
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
-    if (password !== user.password) {
-      return res.status(400).json({ error: "Invalid password" });
+    const pwdCompare = await bcrypt.compare(password, user.password);
+    if (!pwdCompare) {
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     const data = {

@@ -3,7 +3,7 @@ import TeamTaskContext from './TeamTaskContext';
 
 
 const TeamTaskState = (props) => {
-  const host = "http://localhost:5000"; 
+  const host = process.env.REACT_APP_API_URL || "http://localhost:5000"; 
   const [teamTasks, setTeamTasks] = useState([]);
 
   //get  team tasks
@@ -22,7 +22,7 @@ const TeamTaskState = (props) => {
   // Create a new team task
   const addTeamTask = async (task) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/teamtasks/createtask`, {
+      const response = await fetch(`${host}/api/teamtasks/createtask`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ const TeamTaskState = (props) => {
         return;
       }
       
-  
+      setTeamTasks([...teamTasks, result.task]);
       alert("Task created successfully!");
     } catch (err) {
       console.error("Fetch error:", err);
@@ -64,7 +64,7 @@ const TeamTaskState = (props) => {
   // Update a team task
   const updateTeamTask = async (id, updatedTask) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/teamtasks/updatetask/${id}`, {
+      const response = await fetch(`${host}/api/teamtasks/updatetask/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

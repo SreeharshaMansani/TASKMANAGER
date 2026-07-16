@@ -6,12 +6,14 @@ import './css/Login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { getTasks } = useContext(PersonalTaskContext);
+  const { getTasks, getuser } = useContext(PersonalTaskContext);
   const navigate = useNavigate(); 
+
+  const host = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   const loginuser = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/login`, {
+      const response = await fetch(`${host}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,6 +25,7 @@ const Login = () => {
       if (json.success) {
         alert("Logged in sucessfully");
         localStorage.setItem('token', json.authtoken); 
+        await getuser();
         getTasks(); 
         navigate('/'); 
       } else {

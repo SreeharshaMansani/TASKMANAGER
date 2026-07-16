@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PersonalTaskContext from './PersonalTaskContext'; 
 
 const PersonalTaskState = (props) => {
-  const host = "http://localhost:5000";
+  const host = process.env.REACT_APP_API_URL || "http://localhost:5000";
   const [tasks, setTasks] = useState([]);
   const [user, setUser] = useState(''); 
 
   // Fetch tasks
   const getTasks = async () => {
-    const url = `http://localhost:5000/api/personaltasks/fetchtasks`;
+    const url = `${host}/api/personaltasks/fetchtasks`;
     try {
       const response = await fetch(url, {
         headers: {
@@ -19,6 +19,7 @@ const PersonalTaskState = (props) => {
   
       const json = await response.json();
       console.log(json);
+      setTasks(json);
       return json; // Return fetched tasks to be handled outside
     } catch (error) {
       console.error('Failed to fetch tasks:', error.message);
@@ -28,8 +29,15 @@ const PersonalTaskState = (props) => {
   
   
   // Add a new task
-  const addTask = async (title, description, startDate, dueDate) => {
-    const url = `http://localhost:5000/api/personaltasks/createtask`;
+  const addTask = async (title, description, startDate, dueDate, extra = {}) => {
+    const url = `${host}/api/personaltasks/createtask`;
+    let payload;
+    if (typeof title === 'object' && title !== null) {
+      payload = title;
+    } else {
+      payload = { title, description, startDate, dueDate, ...extra };
+    }
+
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -37,23 +45,33 @@ const PersonalTaskState = (props) => {
           'Content-Type': 'application/json',
           'auth-token': localStorage.getItem('token')
         },
-        body: JSON.stringify({ title, description, startDate, dueDate }),
+        body: JSON.stringify(payload),
       });
 
+      const resJson = await response.json();
       if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        throw new Error(resJson.error || resJson.errors?.join(', ') || `Response status: ${response.status}`);
       }
 
-      const newTask = await response.json();
-      setTasks([...tasks, newTask]); // Add the new task to the state
+      setTasks([...tasks, resJson]); // Add the new task to the state
+      return resJson;
     } catch (error) {
       console.error('Failed to add task:', error.message);
+      alert('Failed to add task: ' + error.message);
+      return null;
     }
   };
 
   // Update a task
-  const updateTask = async (id, title, description, dueDate) => {
-    const url = `http://localhost:5000/api/personaltasks/updatetask/${id}`;
+  const updateTask = async (id, title, description, dueDate, extra = {}) => {
+    const url = `${host}/api/personaltasks/updatetask/${id}`;
+    let payload;
+    if (typeof title === 'object' && title !== null) {
+      payload = title;
+    } else {
+      payload = { title, description, dueDate, ...extra };
+    }
+
     try {
       const response = await fetch(url, {
         method: 'PUT',
@@ -61,17 +79,20 @@ const PersonalTaskState = (props) => {
           'Content-Type': 'application/json',
           'auth-token': localStorage.getItem('token')
         },
-        body: JSON.stringify({ title, description, dueDate }),
+        body: JSON.stringify(payload),
       });
 
+      const resJson = await response.json();
       if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        throw new Error(resJson.error || resJson.errors?.join(', ') || `Response status: ${response.status}`);
       }
 
-      const updatedTask = await response.json();
-      setTasks(tasks.map((task) => (task._id === id ? updatedTask : task)));
+      setTasks(tasks.map((task) => (task._id === id ? resJson : task)));
+      return resJson;
     } catch (error) {
       console.error('Failed to update task:', error.message);
+      alert('Failed to update task: ' + error.message);
+      return null;
     }
   };
 
@@ -128,7 +149,7 @@ const PersonalTaskState = (props) => {
   }, []); 
 
   return (
-    <PersonalTaskContext.Provider value={{ tasks, setTasks, addTask, updateTask, deleteTask, getTasks, getuser, user }}>
+    <PersonalTaskContext.Provider value={{ tasks, setTasks, addTask, updateTask, deleteTask, getTasks, getuser, user, setUser }}>
       {props.children}
     </PersonalTaskContext.Provider>
   );

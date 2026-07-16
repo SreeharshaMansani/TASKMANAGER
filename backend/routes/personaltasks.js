@@ -9,6 +9,11 @@ router.post('/createtask', fetchuser, [
   body('title', 'Title is required').isLength({ min: 1 }),
   body('description', 'Description is required').isLength({ min: 1 }),
   body('dueDate', 'Valid due date is required').isISO8601().toDate(),
+  body('priority').optional().isIn(['High', 'Medium', 'Low']).withMessage('Priority must be High, Medium, or Low'),
+  body('category').optional().isIn(['Personal', 'Work', 'Study']).withMessage('Category must be Personal, Work, or Study'),
+  body('status').optional().isIn(['Pending', 'In Progress', 'Completed']).withMessage('Status must be Pending, In Progress, or Completed'),
+  body('sections').optional().isArray().withMessage('Sections must be an array'),
+  body('steps').optional().isArray().withMessage('Steps must be an array'),
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -19,18 +24,28 @@ router.post('/createtask', fetchuser, [
       });
     }
 
-    const { title, description, tag, dueDate } = req.body;
+    const { title, description, dueDate, priority, category, status, sections, steps, startDate } = req.body;
     const validdueDate = new Date(dueDate);
-    if (validdueDate < Date.now()) { 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(validdueDate);
+    checkDate.setHours(23, 59, 59, 999);
+    if (checkDate < today) { 
       return res.status(400).json({ 
         success: false, 
-        error: "Due date must be in the future" 
+        error: "Due date must be today or in the future" 
       });
     }
     const data = new Data({
       title,
       description,
+      startDate: startDate ? new Date(startDate) : new Date(),
       dueDate: validdueDate,
+      priority: priority || 'Medium',
+      category: category || 'Personal',
+      status: status || 'Pending',
+      sections: sections || [],
+      steps: steps || [],
       user: req.user.id,
     });
 
@@ -56,13 +71,32 @@ router.get('/fetchtasks', fetchuser, async (req, res) => {
 
 // ROUTE 3: Update a task | PUT "/api/tasks/updatetask/:id"
 router.put('/updatetask/:id', fetchuser, async (req, res) => {
-  const { title, description, tag, dueDate } = req.body;
+  const { title, description, dueDate, priority, category, status, sections, steps, startDate } = req.body;
 
   try {
     const newData = {};
-    if (title) newData.title = title;
-    if (description) newData.description = description;
-    if (dueDate) newData.dueDate = dueDate;
+    if (title !== undefined) newData.title = title;
+    if (description !== undefined) newData.description = description;
+    if (dueDate !== undefined) {
+      const validdueDate = new Date(dueDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const checkDate = new Date(validdueDate);
+      checkDate.setHours(23, 59, 59, 999);
+      if (checkDate < today) {
+        return res.status(400).json({
+          success: false,
+          error: "Due date must be today or in the future"
+        });
+      }
+      newData.dueDate = validdueDate;
+    }
+    if (startDate !== undefined) newData.startDate = startDate;
+    if (priority !== undefined) newData.priority = priority;
+    if (category !== undefined) newData.category = category;
+    if (status !== undefined) newData.status = status;
+    if (sections !== undefined) newData.sections = sections;
+    if (steps !== undefined) newData.steps = steps;
 
     let data = await Data.findById(req.params.id);
     if (!data) return res.status(404).send("Task Not Found");

@@ -7,8 +7,9 @@ import Home from './components/Home';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import PersonalTaskState from './components/PersonalTaskState';
-import Createtask from './components/Createtask'
-import TeamTaskState from './components/TeamTaskState'
+import Createtask from './components/Createtask';
+import TeamTaskState from './components/TeamTaskState';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/createtask" element={<Createtask/>}/>
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       </TeamTaskState>
       </PersonalTaskState>

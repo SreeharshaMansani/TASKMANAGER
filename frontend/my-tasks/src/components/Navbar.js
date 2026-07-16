@@ -1,44 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import PersonalTaskContext from './PersonalTaskContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [isLoggedin, setIsLoggedin] = useState(!!localStorage.getItem('token'));
+  const { user, setUser, getuser } = useContext(PersonalTaskContext);
 
   useEffect(() => {
-    const getName = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      try {
-        const response = await fetch('http://localhost:5000/api/auth/getuser', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'auth-token': token,
-          },
-        });
-
-        const json = await response.json();
-        if (json.name) {
-          setName(`Welcome, ${json.name}`);
-          setIsLoggedin(true);
-        } else {
-          console.error(json.error || 'Failed to fetch user');
-        }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    };
-
-    getName();
-  }, []);
+    if (localStorage.getItem('token') && !user) {
+      getuser();
+    }
+  }, [user, getuser]);
 
   const logout = () => {
     localStorage.clear();
-    setName('');
-    setIsLoggedin(false);
+    setUser('');
     navigate('/');
   };
 
@@ -48,10 +24,13 @@ const Navbar = () => {
     navigate('/login');
   };
 
+  const isLoggedin = !!user;
+  const name = user ? `Welcome, ${user}` : '';
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{ height: "75px", fontSize: "20px", fontFamily: "cursive", color: "#3E3F5B" }}>
+    <nav className="navbar navbar-expand-lg navbar-light" style={{ height: "75px", fontSize: "1rem", borderBottom: "1px solid var(--border-color)", background: "var(--bg-secondary)", zIndex: 100 }}>
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">MyTasks</Link>
+        <Link className="navbar-brand" to="/" style={{ fontWeight: 800, color: "var(--primary)" }}>TaskFlow</Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -66,18 +45,23 @@ const Navbar = () => {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
+            {localStorage.getItem('token') && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/dashboard" style={{ fontWeight: 500 }}>Dashboard</Link>
+              </li>
+            )}
             <li className="nav-item">
-              <Link className="nav-link" to="/personal">Personal Tasks</Link>
+              <Link className="nav-link" to="/personal" style={{ fontWeight: 500 }}>Personal Tasks</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/team">Team Tasks</Link>
+              <Link className="nav-link" to="/team" style={{ fontWeight: 500 }}>Team Tasks</Link>
             </li>
           </ul>
         </div>
 
-        <div className="d-flex align-items-center" style={{ color: "#F1EFEC" }}>
-          <span className="me-3">{name}</span>
-          {isLoggedin && <button type="button" onClick={handleSubmit} className="btn btn-light">Logout</button>}
+        <div className="d-flex align-items-center">
+          <span className="me-3" style={{ fontWeight: 500, color: "var(--text-secondary)" }}>{name}</span>
+          {isLoggedin && <button type="button" onClick={handleSubmit} className="btn btn-outline-secondary btn-sm" style={{ borderRadius: "8px", fontWeight: 600 }}>Logout</button>}
         </div>
       </div>
     </nav>

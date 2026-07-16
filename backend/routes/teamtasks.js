@@ -4,7 +4,6 @@ const { body, validationResult } = require('express-validator');
 const fetchuser = require('./fetchuser');
 const TeamTask = require('../models/TeamTask');
 const User = require('../models/User');
-express.json();
 
 // ROUTE 1: Create a team task - POST "/api/teamtasks/createtask"
 router.post('/createtask', fetchuser, [
@@ -12,17 +11,27 @@ router.post('/createtask', fetchuser, [
   body('dueDate').isISO8601().toDate().withMessage('Valid due date is required'),
   body('assignedTo').optional().isArray().withMessage('assignedTo must be an array'),
   body('assignedTo.*').isEmail().withMessage('Each assignedTo must be a valid email'),
+  body('priority').optional().isIn(['High', 'Medium', 'Low']).withMessage('Priority must be High, Medium, or Low'),
+  body('category').optional().isIn(['Personal', 'Work', 'Study']).withMessage('Category must be Personal, Work, or Study'),
+  body('status').optional().isIn(['Pending', 'In Progress', 'Completed']).withMessage('Status must be Pending, In Progress, or Completed'),
+  body('sections').optional().isArray().withMessage('Sections must be an array'),
+  body('steps').optional().isArray().withMessage('Steps must be an array'),
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ success: false, error: errors.array().map(err => err.msg) });
   }
 
-  const { title, description, assignedTo, startDate, dueDate } = req.body;
+  const { title, description, assignedTo, startDate, dueDate, priority, category, status, sections, steps } = req.body;
 
   try {
-    if (new Date(dueDate) < new Date()) {
-      return res.status(400).json({ success: false, error: "Due date must be in the future" });
+    const validdueDate = new Date(dueDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(validdueDate);
+    checkDate.setHours(23, 59, 59, 999);
+    if (checkDate < today) {
+      return res.status(400).json({ success: false, error: "Due date must be today or in the future" });
     }
 
     let assignedToIds = [];
@@ -47,6 +56,11 @@ router.post('/createtask', fetchuser, [
       assignedTo: assignedToIds,
       startDate: startDate ? new Date(startDate) : new Date(),
       dueDate,
+      priority: priority || 'Medium',
+      category: category || 'Personal',
+      status: status || 'Pending',
+      sections: sections || [],
+      steps: steps || [],
       createdBy: req.user.id
     });
 
@@ -90,13 +104,18 @@ router.put('/updatetask/:id', fetchuser, [
   body('removeUsers.*').optional().isEmail().withMessage('Invalid email in removeUsers'),
   body('startDate').optional().isISO8601().toDate(),
   body('dueDate').optional().isISO8601().toDate().withMessage('Valid due date is required'),
+  body('priority').optional().isIn(['High', 'Medium', 'Low']).withMessage('Priority must be High, Medium, or Low'),
+  body('category').optional().isIn(['Personal', 'Work', 'Study']).withMessage('Category must be Personal, Work, or Study'),
+  body('status').optional().isIn(['Pending', 'In Progress', 'Completed']).withMessage('Status must be Pending, In Progress, or Completed'),
+  body('sections').optional().isArray().withMessage('Sections must be an array'),
+  body('steps').optional().isArray().withMessage('Steps must be an array'),
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ success: false, error: errors.array() });
+    return res.status(400).json({ success: false, error: errors.array().map(e => e.msg) });
   }
 
-  const { title, description, assignedTo, addUsers, removeUsers, startDate, dueDate } = req.body;
+  const { title, description, assignedTo, addUsers, removeUsers, startDate, dueDate, priority, category, status, sections, steps } = req.body;
 
   try {
     const task = await TeamTask.findById(req.params.id);
@@ -140,6 +159,11 @@ router.put('/updatetask/:id', fetchuser, [
     if (description !== undefined) dbUpdate.description = description;
     if (startDate !== undefined) dbUpdate.startDate = startDate;
     if (dueDate !== undefined) dbUpdate.dueDate = dueDate;
+    if (priority !== undefined) dbUpdate.priority = priority;
+    if (category !== undefined) dbUpdate.category = category;
+    if (status !== undefined) dbUpdate.status = status;
+    if (sections !== undefined) dbUpdate.sections = sections;
+    if (steps !== undefined) dbUpdate.steps = steps;
 
     // Process assignedTo (replace)
     if (assignedTo !== undefined) {
