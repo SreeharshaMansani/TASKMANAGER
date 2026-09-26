@@ -1,0 +1,260 @@
+/* Shared task pages. Kept under one scope so other app screens stay independent. */
+.task-page {
+  width: 100%;
+  max-width: var(--content-width, 1200px);
+  min-width: 0;
+  min-height: calc(100dvh - var(--nav-height, 72px));
+  margin-inline: auto;
+  padding: clamp(1.5rem, 4vw, 3rem) var(--page-gutter, clamp(1rem, 3vw, 2rem)) 6rem;
+}
+
+.task-page :is(.header-section, .team-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.task-page :is(.page-title, .team-title) {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+
+.task-page :is(.title-icon, .team-icon) {
+  flex-shrink: 0;
+  color: var(--primary);
+  font-size: 1.2em;
+}
+
+.task-page :is(.floating-action-btn, .floating-team-button) {
+  display: inline-flex;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 10px rgb(79 70 229 / 18%);
+  cursor: pointer;
+  transition: background-color 160ms, transform 160ms;
+}
+
+.task-page .plus-icon { font-size: 1.5rem; }
+
+.task-page :is(.tasks-grid, .team-tasks-grid, .loading-skeleton, .loading-grid) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  align-items: start;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.task-page .controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 0;
+  margin-bottom: 1.5rem;
+  padding: 1.125rem;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  box-shadow: 0 3px 12px rgb(15 23 42 / 3%);
+}
+
+.task-page .search-bar-wrapper { position: relative; min-width: 0; }
+.task-page .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.task-page .search-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 14px 10px 42px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.task-page .filters-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(180px, 1.15fr);
+  align-items: stretch;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.task-page .filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  background: var(--bg-primary);
+}
+
+.task-page .filter-icon { flex-shrink: 0; color: var(--text-secondary); }
+.task-page .filter-select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.task-page .sort-label {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.task-page .filter-group:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.task-page :is(.empty-state, .empty-team-state) {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: clamp(2rem, 6vw, 4rem) 1rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  text-align: center;
+}
+.task-page .empty-illustration { width: min(100%, 200px); height: auto; margin-bottom: 1.5rem; }
+.task-page :is(.empty-message, .empty-team-text) {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.task-page :is(.task-skeleton-card, .team-skeleton) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
+  padding: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-secondary);
+}
+.task-page .skeleton-line { position: relative; height: 16px; border-radius: 5px; background: #edf0f5; overflow: hidden; }
+.task-page .skeleton-line:last-child { width: 60%; }
+.task-page .skeleton-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 65%), transparent);
+  transform: translateX(-100%);
+  animation: task-shimmer 1.5s infinite;
+}
+@keyframes task-shimmer { to { transform: translateX(100%); } }
+
+.task-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: rgb(15 23 42 / 48%);
+}
+.task-dialog-backdrop :is(.task-modal, .team-modal-content) {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: var(--bg-secondary);
+  box-shadow: 0 24px 60px rgb(15 23 42 / 20%);
+}
+.task-dialog-backdrop :is(.modal-close, .team-modal-close) {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.task-dialog-backdrop .task-form > .title { padding-right: 2.5rem; }
+
+.task-page :is(button, input):focus-visible,
+.task-dialog-backdrop button:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .task-page :is(.floating-action-btn, .floating-team-button):hover { background: var(--primary-hover); transform: translateY(-2px); }
+  .task-dialog-backdrop :is(.modal-close, .team-modal-close):hover { background: var(--primary-light); color: var(--primary); }
+}
+@media (max-width: 900px) {
+  .task-page .filters-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .task-page { padding-top: 1.5rem; }
+  .task-page .controls-panel { padding: 0.875rem; }
+  .task-page .filters-wrapper { grid-template-columns: minmax(0, 1fr); gap: 0.625rem; }
+  .task-page .filter-select { font-size: 1rem; }
+  .task-dialog-backdrop { padding: 0.625rem; }
+  .task-dialog-backdrop :is(.task-modal, .team-modal-content) {
+    max-height: calc(100vh - 1.25rem);
+    max-height: calc(100dvh - 1.25rem);
+    padding: 1.25rem;
+    border-radius: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .task-page .skeleton-line::after { animation: none; }
+  .task-page :is(.floating-action-btn, .floating-team-button) { transition: none; }
+}

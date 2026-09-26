@@ -1,0 +1,31 @@
+.home-page-container { min-height: calc(100svh - var(--nav-height)); background: var(--bg-primary); }
+.home-content { width: 100%; max-width: var(--content-width); margin-inline: auto; padding: clamp(2rem, 5vw, 4rem) var(--page-gutter); text-align: center; }
+.home-hero { border-top: 1px solid var(--border-color); padding-bottom: 4rem; }
+.home-brand { color: var(--primary); }
+.home-content h2, .home-welcome-card h1 { font-size: clamp(1.85rem, 4vw, 2.75rem); line-height: 1.15; font-weight: 750; letter-spacing: -.04em; margin: 0; overflow-wrap: anywhere; }
+.home-eyebrow { margin: 0 0 1rem; color: var(--primary); font-size: .72rem; font-weight: 700; letter-spacing: .13em; }
+.home-lead { max-width: 500px; margin: 1.25rem auto 0; font-size: clamp(1rem, 2vw, 1.1rem); line-height: 1.7; color: var(--text-secondary); }
+.home-features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; max-width: 850px; margin: 2.5rem auto 0; }
+.home-feature { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; border: 1px solid var(--border-color); border-radius: 18px; background: var(--bg-secondary); box-shadow: var(--card-shadow); padding: clamp(1.5rem, 4vw, 2.5rem); }
+.home-feature-icon { flex-shrink: 0; font-size: 2rem; color: var(--primary); margin-bottom: .4rem; }
+.home-feature h3 { margin: 0; font-size: 1.25rem; font-weight: 650; }
+.home-feature p { margin: 0 0 .5rem; color: var(--text-secondary); }
+.home-feature .btn { margin-top: auto; }
+.home-footer { margin-top: 2.5rem; font-size: .85rem; color: var(--text-muted); }
+.home-auth { display: grid; place-items: center; min-height: calc(100svh - var(--nav-height)); padding: clamp(2rem, 6vw, 4rem) var(--page-gutter); }
+.home-welcome-card { width: 100%; max-width: 670px; min-width: 0; padding: clamp(1.5rem, 5vw, 3.5rem); text-align: center; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 24px; box-shadow: 0 12px 40px -24px rgba(15, 23, 42, .24); }
+.home-mark { display: grid; place-items: center; width: 60px; height: 60px; margin: 0 auto 1.75rem; border-radius: 18px; background: var(--primary-light); color: var(--primary); font-size: 30px; }
+.home-auth-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.home-benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; border-top: 1px solid var(--border-color); padding-top: 1.75rem; margin-top: 2rem; }
+.home-benefits > div { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: .5rem; font-size: .85rem; color: var(--text-secondary); }
+.home-benefits svg { flex-shrink: 0; color: var(--primary); font-size: 1.3rem; }
+@media (max-width: 600px) {
+  .home-features { grid-template-columns: minmax(0, 1fr); }
+  .home-welcome-card { border-radius: 18px; }
+  .home-auth-actions > .btn { flex: 1 1 180px; }
+  .home-benefits { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .home-benefits > div { flex-direction: row; justify-content: center; }
+}
+@media (max-height: 540px) and (orientation: landscape) {
+  .home-auth { align-items: start; padding-block: 1.5rem; }
+}

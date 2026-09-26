@@ -1,0 +1,16 @@
+{
+  "name": "taskmanager",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "setup": "npm --prefix backend ci && npm --prefix frontend ci",
+    "start": "npm run start:frontend",
+    "start:frontend": "npm --prefix frontend start --",
+    "start:backend": "npm --prefix backend start --",
+    "dev:backend": "npm --prefix backend run dev --",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "npm --prefix backend test --",
+    "test:frontend": "npm --prefix frontend test -- --watchAll=false --runInBand",
+    "build": "npm --prefix frontend run build --"
+  }
+}

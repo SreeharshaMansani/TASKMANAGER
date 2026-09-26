@@ -4,10 +4,10 @@ node_modules/
 .pnp.js
 
 # Testing
-/coverage
+coverage/
 
 # Production
-/build
+build/
 
 # Miscellaneous
 .DS_Store
@@ -23,3 +23,11 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 *.env
+
+# Local service and test logs
+/logs/
+
+# Local configuration; commit templates only
+.env.*
+!.env.example
+*.log

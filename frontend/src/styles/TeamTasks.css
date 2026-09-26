@@ -1,0 +1,11 @@
+/* Team pages use the shared .task-page layout from Personal.css. */
+.team-tasks-container .error-banner {
+  margin-bottom: 1.5rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
